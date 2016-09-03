@@ -36,8 +36,7 @@ describe NameDrop::Client do
     end
   end
 
-  shared_examples_for 'a request' do |method, error_verb, arguments|
-    let(:endpoint) { arguments[0] }
+  shared_examples_for 'a request' do
     it 'sends the method in a hash to RestClient' do
       expect(RestClient::Request).to receive(:execute).with(hash_including(method: method)).and_return(json)
       client.send(method, *arguments)
@@ -66,14 +65,14 @@ describe NameDrop::Client do
     end
   end
 
-  shared_examples_for 'a request without attributes' do |method, endpoint|
+  shared_examples_for 'a request without attributes' do
     it 'does not send a payload with the request' do
       expect(RestClient::Request).to receive(:execute).with(hash_excluding(payload: anything)).and_return(json)
       client.send(method, endpoint)
     end
   end
 
-  shared_examples_for 'a request with attributes' do |method, endpoint, attributes|
+  shared_examples_for 'a request with attributes' do
     it 'sends a payload with the request' do
       expect(RestClient::Request).to receive(:execute).with(hash_including(payload: attributes.to_json)).and_return(json)
       client.send(method, endpoint, attributes)
@@ -81,22 +80,41 @@ describe NameDrop::Client do
   end
 
   describe '#get' do
-    it_should_behave_like 'a request', :get, 'retrieving', ['alerts']
-    it_should_behave_like 'a request without attributes', :get, 'alerts'
+    let(:method) { :get }
+    let(:error_verb) { 'retrieving' }
+    let(:endpoint) { 'alerts' }
+    let(:arguments) { [endpoint] }
+    it_should_behave_like 'a request'
+    it_should_behave_like 'a request without attributes'
   end
 
   describe '#post' do
-    it_should_behave_like 'a request', :post, 'creating', ['alerts', { your_mom: 'is so' }]
-    it_should_behave_like 'a request with attributes', :post, 'alerts', { your_mom: 'is so' }
+    let(:method) { :post }
+    let(:error_verb) { 'creating' }
+    let(:endpoint) { 'alerts' }
+    let(:attributes) { { your_mom: 'is so' } }
+    let(:arguments) { [endpoint, attributes] }
+    it_should_behave_like 'a request'
+    it_should_behave_like 'a request with attributes'
   end
 
   describe '#put' do
-    it_should_behave_like 'a request', :put, 'updating', ['alerts/1', { your_mom: 'is such a' }]
-    it_should_behave_like 'a request with attributes', :put, 'alerts', { your_mom: 'is such a' }
+    let(:method) { :put }
+    let(:error_verb) { 'updating' }
+    let(:endpoint) { 'alerts/1' }
+    let(:attributes) { { your_mom: 'is such a' } }
+    let(:arguments) { [endpoint, attributes] }
+
+    it_should_behave_like 'a request'
+    it_should_behave_like 'a request with attributes'
   end
 
   describe '#delete' do
-    it_should_behave_like 'a request', :delete, 'deleting', ['alerts/1']
-    it_should_behave_like 'a request without attributes', :delete, 'alerts/1'
+    let(:method) { :delete }
+    let(:error_verb) { 'deleting' }
+    let(:endpoint) { 'alerts/1' }
+    let(:arguments) { [endpoint] }
+    it_should_behave_like 'a request'
+    it_should_behave_like 'a request without attributes'
   end
 end
