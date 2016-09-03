@@ -1,11 +1,14 @@
 require 'name_drop/version'
 
-module NameDrop
-  class << self
-    attr_reader :config
+require 'name_drop/configuration'
+require 'name_drop/client'
+require 'name_drop/error'
 
-    def config=(config)
-      @config ||= Struct.new(*config.keys).new(*config.values)
-    end
-  end
-end
+require 'name_drop/resources/base'
+require 'name_drop/resources/base_factory'
+
+require 'name_drop/resources/alert'
+require 'name_drop/resources/mention'
+require 'name_drop/resources/share'
+
+
