@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NameDrop::Resources::Share do
   let(:client) { NameDrop::Client.new }
-  let(:share) { NameDrop::Resources::Share.new(client, id: 8) }
+  let(:share) { NameDrop::Resources::Share.new(client, 'id' => 8) }
 
   describe '#all' do
     it 'calls get on client' do

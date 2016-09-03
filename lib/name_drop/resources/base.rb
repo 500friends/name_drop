@@ -35,7 +35,7 @@ module NameDrop
       end
 
       def save
-        path = new_record? ? endpoint : "#{endpoint}/#{attributes[:id]}"
+        path = new_record? ? endpoint : "#{endpoint}/#{attributes['id']}"
         response = client.send(persistence_action, path, attributes)
         if response[response_key].present?
           self.attributes = response[response_key]
@@ -47,7 +47,7 @@ module NameDrop
       end
 
       def destroy(params = {})
-        client.delete("#{endpoint(params)}/#{attributes[:id]}")
+        client.delete("#{endpoint(params)}/#{attributes['id']}")
       end
 
       def self.response_key
