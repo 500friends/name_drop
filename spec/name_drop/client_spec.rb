@@ -17,21 +17,21 @@ describe NameDrop::Client do
 
   describe '#alerts' do
     it 'sends self and Alert to BaseFactory.new' do
-      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Alert')
+      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Alert').and_call_original
       client.alerts
     end
   end
 
   describe '#mentions' do
     it 'sends self and Mention to Resources::BaseFactory.new' do
-      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Mention')
+      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Mention').and_call_original
       client.mentions
     end
   end
 
   describe '#shares' do
     it 'sends self and Share to Resources::BaseFactory.new' do
-      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Share')
+      expect(NameDrop::Resources::BaseFactory).to receive(:new).with(client, 'Share').and_call_original
       client.shares
     end
   end
