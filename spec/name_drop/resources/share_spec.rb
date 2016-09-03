@@ -2,9 +2,13 @@ require 'spec_helper'
 
 describe NameDrop::Resources::Share do
   let(:client) { NameDrop::Client.new }
-  let(:share) { NameDrop::Resources::Share.new(client) }
+  let(:share) { NameDrop::Resources::Share.new(client, id: 8) }
 
   describe '#all' do
+    it 'calls get on client' do
+      expect(client).to receive(:get).with('alerts/1/shares').and_return({ 'shares' => %w(a b) })
+      NameDrop::Resources::Share.all(client, alert_id: 1)
+    end
   end
 
   describe '#find' do
@@ -24,6 +28,10 @@ describe NameDrop::Resources::Share do
   end
 
   describe '#destroy' do
+    it 'sends client delete with appropriate endpoint' do
+      expect(client).to receive(:delete).with('alerts/5/shares/8')
+      share.destroy(alert_id: 5)
+    end
   end
 
   describe '.endpoint' do

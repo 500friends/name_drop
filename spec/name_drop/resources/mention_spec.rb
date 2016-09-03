@@ -5,6 +5,10 @@ describe NameDrop::Resources::Mention do
   let(:mention) { NameDrop::Resources::Mention.new(client) }
 
   describe '#all' do
+    it 'calls get on client' do
+      expect(client).to receive(:get).with('alerts/1/mentions').and_return({ 'mentions' => %w(a b) })
+      NameDrop::Resources::Mention.all(client, alert_id: 1)
+    end
   end
 
   describe '#find' do
