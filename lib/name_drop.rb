@@ -1,14 +1,37 @@
-require 'name_drop/version'
+require 'active_support'
 
-require 'name_drop/configuration'
-require 'name_drop/client'
-require 'name_drop/error'
+module NameDrop
+  extend ActiveSupport::Autoload
 
-require 'name_drop/resources/base'
-require 'name_drop/resources/base_factory'
+  class << self
+    def configuration
+      @configuration ||= Configuration.new
+    end
 
-require 'name_drop/resources/alert'
-require 'name_drop/resources/mention'
-require 'name_drop/resources/share'
+    def configuration=(config)
+      @configuration = config
+    end
 
+    def configure
+      yield configuration
+    end
+  end
 
+  eager_autoload do
+    autoload :Configuration
+    autoload :Client
+    autoload :Error
+  end
+
+  module Resources
+    extend ActiveSupport::Autoload
+
+    eager_autoload do
+      autoload :Base
+      autoload :BaseFactory
+      autoload :Alert
+      autoload :Mention
+      autoload :Share
+    end
+  end
+end
