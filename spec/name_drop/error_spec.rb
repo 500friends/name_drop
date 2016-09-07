@@ -9,7 +9,7 @@ describe NameDrop::Error do
 
     it 'sets the response' do
       error = NameDrop::Error.new('You will take me', 'to Jobba now')
-      expect(error.response).to eq('to Jobba now')
+      expect(error.detail).to eq('to Jobba now')
     end
   end
 end
