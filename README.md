@@ -1,8 +1,8 @@
+[![Code Climate](https://codeclimate.com/github/500friends/name_drop/badges/gpa.svg)](https://codeclimate.com/github/500friends/name_drop)
+
 # NameDrop
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/name_drop`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+NameDrop provides a ruby interface to the [Mention API](https://dev.mention.com/current/index.html)
 
 ## Installation
 
@@ -19,10 +19,55 @@ And then execute:
 Or install it yourself as:
 
     $ gem install name_drop
+## Configuration
+Add an initializer file
+(In rails typically you would name the file: config/initializers/name_drop.rb)
+
+```ruby
+NameDrop.configure do |config|
+  config.account_id = [MENTION_API_ACCOUNT_ID]
+  config.access_token = [MENTION_API_ACCESS_TOKEN]
+end
+```
+
 
 ## Usage
 
-TODO: Write usage instructions here
+Creating a client
+```ruby
+client = NameDrop::Client.new
+```
+
+Fetching all objects
+```ruby
+all_alerts = client.alerts.all
+```
+
+Fetching single object
+```ruby
+alert = client.alert.find(mention_alert_id)
+```
+
+Create object
+```ruby
+alert = client.alert.build(new_attributes_hash)
+alert.save
+```
+
+Update object
+```ruby
+alert = client.alert.find(mention_alert_id)
+alert.attributes = updated_attributes_hash
+alert.save
+```
+
+Destroy object
+```ruby
+shares = client.share.all(alert_id: 1)
+shares.each do |share|
+  share.destroy
+end
+```
 
 ## Development
 
