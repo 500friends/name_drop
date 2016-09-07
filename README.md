@@ -28,8 +28,8 @@ Add an initializer file
 
 ```ruby
 NameDrop.configure do |config|
-  config.account_id = [MENTION_API_ACCOUNT_ID]
-  config.access_token = [MENTION_API_ACCESS_TOKEN]
+  config.account_id = ENV['MENTION_API_ACCOUNT_ID']
+  config.access_token = ENV['MENTION_API_ACCESS_TOKEN']
 end
 ```
 
