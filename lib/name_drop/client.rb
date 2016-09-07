@@ -39,7 +39,7 @@ module NameDrop
       response = RestClient::Request.execute(create_request_hash(method, endpoint, attributes))
       JSON.parse(response) unless response.empty?
     rescue RestClient::ExceptionWithResponse => err
-      raise NameDrop::Error.new(error_message(method), JSON.parse(err.response))
+      raise NameDrop::Error.new(error_message(method), JSON.parse(err.response).with_indifferent_access)
     end
 
     def create_request_hash(method, endpoint, attributes)

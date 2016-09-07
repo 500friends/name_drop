@@ -6,7 +6,7 @@ describe NameDrop::Resources::Alert do
 
   describe '#all' do
     it 'calls get on client' do
-      expect(client).to receive(:get).with('alerts').and_return('alerts' => %w(a b))
+      expect(client).to receive(:get).with('alerts').and_return('alerts' => [{ 'a' => 'b' }, { 'c' => 'd' }])
       NameDrop::Resources::Alert.all(client)
     end
   end

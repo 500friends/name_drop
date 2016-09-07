@@ -7,7 +7,8 @@ describe NameDrop::Error do
       expect(error.message).to eq('These arent the')
     end
 
-    it 'sets the response' do
+    it 'sets the detail
+' do
       error = NameDrop::Error.new('You will take me', 'to Jobba now')
       expect(error.detail).to eq('to Jobba now')
     end
