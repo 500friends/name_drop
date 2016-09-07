@@ -1,9 +1,9 @@
 module NameDrop
   class Error < StandardError
-    attr_reader :response
+    attr_reader :detail
 
-    def initialize(msg, response)
-      @response = response
+    def initialize(msg, detail)
+      @detail = detail
       super msg
     end
   end
