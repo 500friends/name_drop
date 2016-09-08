@@ -95,15 +95,11 @@ Style/CollectionMethods:
     find_all: select
     reduce: inject
 Style/CommentAnnotation:
-  Description: Checks formatting of special comments (TODO, FIXME, OPTIMIZE, HACK,
-    REVIEW).
+  Description: Checks formatting of special comments (OPTIMIZE, REVIEW).
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#annotate-keywords
   Enabled: false
   Keywords:
-  - TODO
-  - FIXME
   - OPTIMIZE
-  - HACK
   - REVIEW
 Style/DotPosition:
   Description: Checks the position of the dot in multi-line method calls.

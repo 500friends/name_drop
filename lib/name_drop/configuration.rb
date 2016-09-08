@@ -9,7 +9,6 @@ module NameDrop
   end
 
   class << self
-
     def configuration
       @configuration ||= Configuration.new
     end

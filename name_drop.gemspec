@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rest-client', '~> 2.0'
   spec.add_development_dependency 'activesupport', '~> 5.0'
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 0.6'
+  spec.add_development_dependency 'rubocop', '~> 0.42'
 end
