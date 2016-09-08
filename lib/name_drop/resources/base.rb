@@ -1,7 +1,3 @@
-require 'active_support'
-require 'active_support/inflector'
-require 'active_support/core_ext/object'
-
 module NameDrop
   module Resources
     class Base
@@ -10,7 +6,7 @@ module NameDrop
 
       def initialize(client, attributes = {})
         @client = client
-        @attributes = attributes
+        @attributes = attributes.with_indifferent_access
         @errors = []
       end
 
@@ -35,7 +31,7 @@ module NameDrop
       end
 
       def save
-        path = new_record? ? endpoint : "#{endpoint}/#{attributes['id']}"
+        path = new_record? ? endpoint : "#{endpoint}/#{attributes[:id]}"
         response = client.send(persistence_action, path, attributes)
         if response[response_key].present?
           self.attributes = response[response_key]
@@ -47,7 +43,7 @@ module NameDrop
       end
 
       def destroy(params = {})
-        client.delete("#{endpoint(params)}/#{attributes['id']}")
+        client.delete("#{endpoint(params)}/#{attributes[:id]}")
       end
 
       def self.response_key
@@ -67,7 +63,7 @@ module NameDrop
       end
 
       def new_record?
-        !attributes['id']
+        !attributes[:id]
       end
     end
   end
