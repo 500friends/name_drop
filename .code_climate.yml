@@ -18,4 +18,3 @@ ratings:
   - lib/**
   - "**.rb"
 exclude_paths:
-- spec/**/*
