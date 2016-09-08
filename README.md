@@ -1,8 +1,9 @@
+[![Gem Version](https://img.shields.io/gem/v/name_drop.svg?style=flat)](https://rubygems.org/gems/name_drop)
 [![Build Status](https://travis-ci.org/500friends/name_drop.svg?branch=master)](https://travis-ci.org/500friends/name_drop)
 [![Test Coverage](https://codeclimate.com/github/500friends/name_drop/badges/coverage.svg)](https://codeclimate.com/github/500friends/name_drop/coverage)
 [![Code Climate](https://codeclimate.com/github/500friends/name_drop/badges/gpa.svg)](https://codeclimate.com/github/500friends/name_drop)
-[![Issue Count](https://codeclimate.com/github/500friends/name_drop/badges/issue_count.svg)](https://codeclimate.com/github/500friends/name_drop)
-
+[![Dependency Status](https://gemnasium.com/badges/github.com/500friends/name_drop.svg)](https://gemnasium.com/github.com/500friends/name_drop)
+[![Inline docs](http://inch-ci.org/github/500friends/name_drop.svg?branch=master)](http://inch-ci.org/github/500friends/name_drop)
 
 # NameDrop
 
