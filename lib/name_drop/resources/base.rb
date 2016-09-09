@@ -4,7 +4,7 @@ module NameDrop
       include ::NameDrop::Associations::Dsl
 
       attr_accessor :attributes
-      attr_reader :errors
+      attr_reader :client, :errors
 
       def initialize(client, attributes = {})
         @client = client
@@ -19,8 +19,8 @@ module NameDrop
         end
       end
 
-      def self.find(client, id)
-        response = client.get("#{endpoint}/#{id}")
+      def self.find(client, id, parmas = {})
+        response = client.get("#{endpoint(params)}/#{id}")
         if response[response_key].present?
           new(client, response[response_key])
         else
@@ -53,8 +53,6 @@ module NameDrop
       end
 
       private
-
-      attr_reader :client
 
       def response_key
         self.class.response_key
