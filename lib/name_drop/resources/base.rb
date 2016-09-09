@@ -1,6 +1,8 @@
 module NameDrop
   module Resources
     class Base
+      include ::NameDrop::Associations::Dsl
+
       attr_accessor :attributes
       attr_reader :errors
 
