@@ -9,3 +9,5 @@
 /tmp/
 /.idea/
 /name_drop-0.1.0.gem
+.ruby-version
+.ruby-gemset
