@@ -39,16 +39,19 @@ end
 ## Usage
 
 Creating a client
+
 ```ruby
 client = NameDrop::Client.new
 ```
 
 Fetching all objects
+
 ```ruby
 all_alerts = client.alerts.all
 ```
 
 Fetching single object
+
 ```ruby
 alert = client.alert.find(mention_alert_id)
 ```
@@ -60,6 +63,7 @@ alert.save
 ```
 
 Update object
+
 ```ruby
 alert = client.alert.find(mention_alert_id)
 alert.attributes = updated_attributes_hash
@@ -67,6 +71,7 @@ alert.save
 ```
 
 Destroy object
+
 ```ruby
 shares = client.share.all(alert_id: 1)
 shares.each do |share|
