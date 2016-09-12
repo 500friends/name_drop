@@ -8,9 +8,6 @@ module NameDrop
   #
   # @since 0.1.0
   class Client
-    def initialize(*)
-    end
-
     # @!group Resources
 
     # Allows access through client.alerts
