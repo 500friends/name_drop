@@ -37,4 +37,11 @@ module NameDrop
       autoload :Share
     end
   end
+
+  def self.eager_load!
+    super
+    NameDrop::Resources.eager_load!
+  end
 end
+
+require 'name_drop/railtie' if defined?(Rails)
