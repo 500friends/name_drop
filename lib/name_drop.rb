@@ -1,4 +1,7 @@
 require 'active_support/dependencies/autoload'
+require 'active_support/inflector'
+require 'active_support/core_ext/object'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module NameDrop
   extend ActiveSupport::Autoload
