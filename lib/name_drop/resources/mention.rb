@@ -14,14 +14,6 @@ module NameDrop
       def destroy
         raise NotImplementedError, 'You cannot alter a mention'
       end
-
-      def endpoint
-        self.class.endpoint(alert_id: alert_id)
-      end
-
-      def self.endpoint(params = {})
-        "alerts/#{params[:alert_id]}/mentions"
-      end
     end
   end
 end

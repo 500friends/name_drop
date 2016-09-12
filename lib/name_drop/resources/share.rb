@@ -10,14 +10,6 @@ module NameDrop
       def save
         raise NotImplementedError, 'Single fetch update not supported'
       end
-
-      def self.endpoint(params = {})
-        "alerts/#{params[:alert_id]}/shares"
-      end
-
-      def endpoint(params = {})
-        self.class.endpoint(params)
-      end
     end
   end
 end
