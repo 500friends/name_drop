@@ -2,8 +2,7 @@ require 'rest-client'
 
 module NameDrop
   class Client
-    def initialize(*)
-    end
+    BASE_URL = "https://web.mention.net/api/accounts"
 
     def alerts
       Resources::BaseFactory.new(self, 'Alert')
@@ -63,7 +62,11 @@ module NameDrop
     end
 
     def request_url(endpoint)
-      "https://web.mention.net/api/accounts/#{NameDrop.configuration.account_id}/#{endpoint}"
+      [
+        BASE_URL,
+        NameDrop.configuration.account_id,
+        endpoint
+      ].join("/")
     end
   end
 end
