@@ -8,7 +8,6 @@ module NameDrop
   #
   # @since 0.1.0
   class Client
-    # Initializes new NameDrop::Client object
     def initialize(*)
     end
 

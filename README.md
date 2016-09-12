@@ -4,10 +4,15 @@
 [![Code Climate](https://codeclimate.com/github/500friends/name_drop/badges/gpa.svg)](https://codeclimate.com/github/500friends/name_drop)
 [![Dependency Status](https://gemnasium.com/badges/github.com/500friends/name_drop.svg)](https://gemnasium.com/github.com/500friends/name_drop)
 [![Inline docs](http://inch-ci.org/github/500friends/name_drop.svg?branch=master)](http://inch-ci.org/github/500friends/name_drop)
+[![git.legal](https://git.legal/projects/1363/badge.svg "Number of libraries approved")](https://git.legal/projects/1564)
 
 # NameDrop
 
 NameDrop provides a ruby interface to the [Mention API](https://dev.mention.com/current/index.html)
+
+## Information
+* RDoc documentation [available on RubyDoc.info](http://rubydoc.info/gems/name_drop/frames)
+* Source code [available on GitHub](http://github.com/500friends/name_drop)
 
 ## Installation
 
