@@ -47,4 +47,12 @@ module NameDrop
       autoload :BelongsTo
     end
   end
+
+  def self.eager_load!
+    super
+    NameDrop::Resources.eager_load!
+    NameDrop::Associations.eager_load!
+  end
 end
+
+require 'name_drop/railtie' if defined?(Rails)
