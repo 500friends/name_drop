@@ -45,6 +45,8 @@ module NameDrop
     eager_autoload do
       autoload :Dsl
       autoload :BelongsTo
+      autoload :HasMany
+      autoload :HasManyProxy
     end
   end
 
