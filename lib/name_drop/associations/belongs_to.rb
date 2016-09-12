@@ -21,11 +21,7 @@ module NameDrop
           attr_writer :#{parent}
 
           def #{parent}
-            unless instance_variable_defined?("@#{parent}")
-              @#{parent}= ::NameDrop.resource_class(#{parent}).find(client, attributes[#{key}])
-            end
-
-            @#{parent}
+            @#{parent}||= ::NameDrop.resource_class(#{parent}).find(client, attributes[#{key}])
           end
         EOF
       end
