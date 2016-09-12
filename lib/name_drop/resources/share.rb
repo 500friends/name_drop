@@ -1,10 +1,13 @@
 # Namespace for classes and modules that handle interaction with Mention API
+#
 # @since 0.1.0
 module NameDrop
   # Namespace for classes and modules that encapsulate Mention Objects
+  #
   # @since 0.1.0
   module Resources
     # Ruby object that encapsulates Mention shares of alert; Inherits from Base
+    #
     # @since 0.1.0
     class Share < Base
       # @param [String] _id (unused) for Shares inherited from Base
@@ -18,7 +21,9 @@ module NameDrop
         raise NotImplementedError, 'Single fetch update not supported'
       end
 
-      # @see NameDrop::Share.endpoint
+      # Sets suffix of Mention API call
+      #
+      # @see NameDrop::Resources::Share.endpoint
       # @param [Hash] params the options to return an endpoint with
       # @option params [Number] alert_id Mention Alert Id
       # @return [String] string containing Mention API Endpoint
@@ -26,6 +31,8 @@ module NameDrop
         self.class.endpoint(params)
       end
 
+      # Sets suffix of Mention API call
+      #
       # @param [Hash] params the options to return an endpoint with
       # @option params [Number] alert_id Mention Alert Id
       # @return [String] string containing Mention API Endpoint
