@@ -6,7 +6,7 @@ module NameDrop
 
         parent.class_eval <<-EOF, __FILE__, __LINE__
           def #{collection}
-            @#{collection} ||= HasManyProxy.new(self, #{class_name}).all
+            @#{collection} ||= HasManyProxy.new(self, #{class_name})
           end
         EOF
       end
