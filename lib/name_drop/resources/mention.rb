@@ -1,10 +1,13 @@
 # Namespace for classes and modules that handle interaction with Mention API
+#
 # @since 0.1.0
 module NameDrop
   # Namespace for classes and modules that encapsulate Mention Objects
+  #
   # @since 0.1.0
   module Resources
     # Ruby object that encapsulates Mention mentions; Inherits from Base
+    #
     # @since 0.1.0
     class Mention < Base
       # @param [String] _id (unused) for Mentions inherited from Base
@@ -23,6 +26,8 @@ module NameDrop
         raise NotImplementedError, 'You cannot alter a mention'
       end
 
+      # Sets suffix of Mention API call
+      #
       # @param [Hash] params the options to return an endpoint with
       # @option params [Integer] :alert_id Mention Alert Id
       # @return [String] string containing Mention API Endpoint
