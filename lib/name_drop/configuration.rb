@@ -1,5 +1,13 @@
+# Namespace for classes and modules that handle interaction with Mention API
+# @since 0.1.0
 module NameDrop
+  # Holds configuration for Mention API
+  # @since 0.1.0
   class Configuration
+    # @!attribute account_id
+    #   @return [String] Mention Account ID
+    # @!attribute access_token
+    #   @return [String] Mention Application Access Token
     attr_accessor :account_id, :access_token
 
     def initialize
