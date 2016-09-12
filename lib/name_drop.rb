@@ -1,15 +1,13 @@
+require 'active_support/dependencies/autoload'
 require 'active_support/inflector'
 require 'active_support/concern'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/hash/indifferent_access'
 
 module NameDrop
+  extend ActiveSupport::Autoload
 
   class << self
-    def resource_class(resource)
-      NameDrop::Resources.const_get(resource.to_s.classify)
-    end
-
     def configuration
       @configuration ||= Configuration.new
     end
@@ -19,45 +17,34 @@ module NameDrop
     end
 
     def configure
-      yield(configuration)
+      yield configuration
     end
   end
 
-  autoload :Version,       'name_drop/version'
-  autoload :Configuration, 'name_drop/configuration'
-  autoload :Client,        'name_drop/client'
-  autoload :Error,         'name_drop/error'
+  eager_autoload do
+    autoload :Configuration
+    autoload :Client
+    autoload :Error
+  end
 
   module Resources
-    autoload :Base,        'name_drop/resources/base'
-    autoload :BaseFactory, 'name_drop/resources/base_factory'
+    extend ActiveSupport::Autoload
 
-    autoload :Alert,       'name_drop/resources/alert'
-    autoload :Mention,     'name_drop/resources/mention'
-    autoload :Share,       'name_drop/resources/share'
+    eager_autoload do
+      autoload :Base
+      autoload :BaseFactory
+      autoload :Alert
+      autoload :Mention
+      autoload :Share
+    end
   end
 
   module Associations
-    autoload :Dsl,         'name_drop/associations/dsl'
-    autoload :BelongsTo,   'name_drop/associations/belongs_to'
+    extend ActiveSupport::Autoload
+
+    eager_autoload do
+      autoload :Dsl
+      autoload :BelongsTo
+    end
   end
 end
-
-
-
-# require 'name_drop/version'
-# require 'name_drop/configuration'
-# require 'name_drop/client'
-# require 'name_drop/error'
-#
-# require 'name_drop/resources/base'
-# require 'name_drop/resources/base_factory'
-#
-# require 'name_drop/resources/alert'
-# require 'name_drop/resources/mention'
-# require 'name_drop/resources/share'
-#
-# require 'name_drop/associations/dsl'
-# require 'name_drop/associations/belongs_to'
-
-
