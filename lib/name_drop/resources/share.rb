@@ -1,10 +1,13 @@
 # Namespace for classes and modules that handle interaction with Mention API
+#
 # @since 0.1.0
 module NameDrop
   # Namespace for classes and modules that encapsulate Mention Objects
+  #
   # @since 0.1.0
   module Resources
     # Ruby object that encapsulates Mention shares of alert; Inherits from Base
+    #
     # @since 0.1.0
     class Share < Base
       belongs_to :alert
