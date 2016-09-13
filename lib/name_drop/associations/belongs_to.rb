@@ -21,7 +21,7 @@ module NameDrop
           attr_writer :#{parent}
 
           def #{parent}
-            @#{parent}||= ::NameDrop.resource_class(#{parent}).find(client, attributes[#{key}])
+            @#{parent}||= ::NameDrop::Resources::#{parent.to_s.classify}.find(client, attributes[#{key}])
           end
         EOF
       end

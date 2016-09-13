@@ -73,7 +73,7 @@ module NameDrop
         return prefix unless belongs_to_relationships.present?
 
         belongs_to_relationships.inject(prefix) { |pref_so_far, rel|
-          pref_so_far.to_s + rel.to_s.pluralize + "/" + attributes["#{rel}_id"].to_s + "/"
+          "#{pref_so_far}#{rel.to_s.pluralize}/#{attributes["#{rel}_id"]}/"
         }
       end
 
@@ -81,16 +81,16 @@ module NameDrop
         params = params.with_indifferent_access
 
         prefix = prefix || build_nested_prefix(params)
-        resource_name = self.name.demodulize.downcase.pluralize
+        resource_name = self.name.demodulize.underscore.pluralize
         endpoint = prefix + resource_name
 
         if type == :singular
-          endpoint + params["id"]
+          "#{endpoint}/#{params["id"]}"
         elsif type == :persistence
           if new_record
             endpoint
           else
-            endpoint + "/" + params["id"]
+            "#{endpoint}/#{params["id"]}"
           end
         else
           endpoint
