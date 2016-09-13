@@ -20,32 +20,4 @@ module NameDrop
       @access_token = 'NotARealAccessToken'
     end
   end
-
-  class << self
-    # Returns existing configuration, or a new configuration
-    #
-    # @return [NameDrop::Configuration] either predefined or a new instance
-    def configuration
-      @configuration ||= Configuration.new
-    end
-
-    # Sets configuration for NameDrop
-    #
-    # @param [NameDrop::Configuration] config
-    def configuration=(config)
-      @configuration = config
-    end
-
-    # Allows configuration of NameDrop through block
-    #
-    # @example Set account_id and access_token
-    #   NameDrop.configure do |config|
-    #     config.account_id = ENV['MENTION_API_ACCOUNT_ID']
-    #     config.access_token = ENV['MENTION_API_ACCESS_TOKEN']
-    #   end
-    # @yieldreturn [NameDrop::Configuration] configuration
-    def configure
-      yield(configuration)
-    end
-  end
 end
