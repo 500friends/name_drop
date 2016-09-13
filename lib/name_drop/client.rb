@@ -8,7 +8,7 @@ module NameDrop
   #
   # @since 0.1.0
   class Client
-    BASE_URL = "https://web.mention.net/api/accounts"
+    BASE_URL = "https://web.mention.net/api/accounts".freeze
 
     # @!group Resources
 
