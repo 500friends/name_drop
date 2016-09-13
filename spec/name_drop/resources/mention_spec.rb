@@ -34,10 +34,4 @@ describe NameDrop::Resources::Mention do
       }.to raise_error(NotImplementedError)
     end
   end
-
-  describe '.endpoint' do
-    it 'returns alerts/:alert_id/mentions' do
-      expect(NameDrop::Resources::Mention.endpoint(alert_id: 1)).to eq('alerts/1/mentions')
-    end
-  end
 end
