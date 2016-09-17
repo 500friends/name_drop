@@ -58,6 +58,9 @@ module NameDrop
         else
           response
         end
+      rescue NameDrop::Error => error
+        return if error.detail['code'] == 404
+        raise error
       end
 
       # Builds a new ruby object to encapsulate resource
