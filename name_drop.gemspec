@@ -34,5 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard', '~> 2.14'
   spec.add_development_dependency 'guard-rspec', '~> 4.7'
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 0.6'
+  spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rubocop', '~> 0.42'
 end

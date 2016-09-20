@@ -89,10 +89,15 @@ module NameDrop
     # @return [Hash]
     # @raise [NameDrop::Error] Rescuing RestClient::ExceptionWithResponse
     def request(method, endpoint, attributes = {})
-      response = RestClient::Request.execute(create_request_hash(method, endpoint, attributes))
-      JSON.parse(response) unless response.empty?
+      safe_json_parse(RestClient::Request.execute(create_request_hash(method, endpoint, attributes)))
     rescue RestClient::ExceptionWithResponse => err
-      raise NameDrop::Error.new(error_message(method), JSON.parse(err.response).with_indifferent_access)
+      raise NameDrop::Error.new(error_message(method), safe_json_parse(err.response))
+    end
+
+    def safe_json_parse(json)
+      JSON.parse(json).with_indifferent_access
+    rescue
+      json
     end
 
     # Sets request hash for API including attributes if present
