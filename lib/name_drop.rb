@@ -1,5 +1,6 @@
 require 'active_support/dependencies/autoload'
 require 'active_support/inflector'
+require 'active_support/concern'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/hash/indifferent_access'
 
@@ -52,9 +53,21 @@ module NameDrop
     end
   end
 
+  module Associations
+    extend ActiveSupport::Autoload
+
+    eager_autoload do
+      autoload :Dsl
+      autoload :BelongsTo
+      autoload :HasMany
+      autoload :HasManyProxy
+    end
+  end
+
   def self.eager_load!
     super
     NameDrop::Resources.eager_load!
+    NameDrop::Associations.eager_load!
   end
 end
 

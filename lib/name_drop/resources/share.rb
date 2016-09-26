@@ -10,6 +10,8 @@ module NameDrop
     #
     # @since 0.1.0
     class Share < Base
+      belongs_to :alert
+
       # @param [String] _id (unused) for Shares inherited from Base
       # @raise [NotImplementedError] 'Single fetch share not supported'
       def self.find(_id)
@@ -19,25 +21,6 @@ module NameDrop
       # @raise [NotImplementedError] 'Single fetch share not supported'
       def save
         raise NotImplementedError, 'Single fetch update not supported'
-      end
-
-      # Sets suffix of Mention API call
-      #
-      # @see NameDrop::Resources::Share.endpoint
-      # @param [Hash] params the options to return an endpoint with
-      # @option params [Number] alert_id Mention Alert Id
-      # @return [String] string containing Mention API Endpoint
-      def endpoint(params = {})
-        self.class.endpoint(params)
-      end
-
-      # Sets suffix of Mention API call
-      #
-      # @param [Hash] params the options to return an endpoint with
-      # @option params [Number] alert_id Mention Alert Id
-      # @return [String] string containing Mention API Endpoint
-      def self.endpoint(params = {})
-        "alerts/#{params[:alert_id]}/shares"
       end
     end
   end

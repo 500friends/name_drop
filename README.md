@@ -58,19 +58,25 @@ all_alerts = client.alerts.all
 Fetching single object
 
 ```ruby
-alert = client.alert.find(mention_alert_id)
+alert = client.alerts.find(mention_alert_id)
+```
+
+Fetching nested objects
+
+```ruby
+mentions = alerts.mentions.all
 ```
 
 Create object
 ```ruby
-alert = client.alert.build(new_attributes_hash)
+alert = client.alerts.build(new_attributes_hash)
 alert.save
 ```
 
 Update object
 
 ```ruby
-alert = client.alert.find(mention_alert_id)
+alert = client.alerts.find(mention_alert_id)
 alert.attributes = updated_attributes_hash
 alert.save
 ```
@@ -78,7 +84,7 @@ alert.save
 Destroy object
 
 ```ruby
-shares = client.share.all(alert_id: 1)
+shares = alert.shares
 shares.each do |share|
   share.destroy
 end

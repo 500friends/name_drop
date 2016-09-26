@@ -8,6 +8,8 @@ module NameDrop
   #
   # @since 0.1.0
   class Client
+    BASE_URL = "https://web.mention.net/api/accounts".freeze
+
     # @!group Resources
 
     # Allows access through client.alerts
@@ -139,7 +141,11 @@ module NameDrop
     # @param [String] endpoint
     # @return [String] URL
     def request_url(endpoint)
-      "https://web.mention.net/api/accounts/#{NameDrop.configuration.account_id}/#{endpoint}"
+      [
+        BASE_URL,
+        NameDrop.configuration.account_id,
+        endpoint
+      ].join("/")
     end
   end
 end

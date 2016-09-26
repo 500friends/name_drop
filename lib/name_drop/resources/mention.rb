@@ -10,6 +10,8 @@ module NameDrop
     #
     # @since 0.1.0
     class Mention < Base
+      belongs_to :alert
+
       # @param [String] _id (unused) for Mentions inherited from Base
       # @raise [NotImplementedError] 'Single fetch mention not currently supported'
       def self.find(_id)
@@ -24,15 +26,6 @@ module NameDrop
       # @raise [NotImplementedError] 'You cannot alter a mention'
       def destroy
         raise NotImplementedError, 'You cannot alter a mention'
-      end
-
-      # Sets suffix of Mention API call
-      #
-      # @param [Hash] params the options to return an endpoint with
-      # @option params [Integer] :alert_id Mention Alert Id
-      # @return [String] string containing Mention API Endpoint
-      def self.endpoint(params = {})
-        "alerts/#{params[:alert_id]}/mentions"
       end
     end
   end

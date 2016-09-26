@@ -125,16 +125,4 @@ describe NameDrop::Resources::Alert do
       }.to raise_error(NotImplementedError)
     end
   end
-
-  describe '.endpoint' do
-    it 'returns alerts' do
-      expect(NameDrop::Resources::Alert.endpoint).to eq('alerts')
-    end
-  end
-
-  describe '#endpoint' do
-    it 'returns alerts' do
-      expect(alert.endpoint).to eq('alerts')
-    end
-  end
 end

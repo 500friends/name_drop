@@ -11,6 +11,8 @@ module NameDrop
     # @abstract
     # @since 0.1.0
     class Base
+      include ::NameDrop::Associations::Dsl
+
       # @!attribute [rw] attributes
       #   @return [Hash] object attributes
       attr_accessor :attributes
@@ -20,6 +22,10 @@ module NameDrop
       # @!attribute [r] errors
       #   @return [Hash] object errors
       attr_reader :errors
+
+      # @!attribute [r] client
+      #   @return [NameDrop::Client] object
+      attr_reader :client
 
       # Initializes new NameDrop::Resources::Base object
       # Sets client, adds indifferent access to attributes, sets errors to empty array
@@ -39,7 +45,7 @@ module NameDrop
       # @param [Hash] params
       # @return [Array] resource objects
       def self.all(client, params = {})
-        response = client.get(endpoint(params))
+        response = client.get(path(params: params))
         response[response_key.pluralize].map do |attributes|
           new(client, attributes)
         end
@@ -52,7 +58,7 @@ module NameDrop
       # @option params [Number] id Mention Object Id
       # @return [NameDrop::Resources::Base]
       def self.find(client, id)
-        response = client.get("#{endpoint}/#{id}")
+        response = client.get(path(type: :singular, params: { id: id }))
         if response[response_key].present?
           new(client, response[response_key])
         else
@@ -61,6 +67,46 @@ module NameDrop
       rescue NameDrop::Error => error
         return if error.detail['code'] == 404
         raise error
+      end
+
+      def self.build_nested_prefix(attributes)
+        attributes = attributes.with_indifferent_access
+        belongs_to_relationships = ::NameDrop::Associations::BelongsTo.relationships[self.name]
+        prefix = ""
+        return prefix unless belongs_to_relationships.present?
+
+        belongs_to_relationships.inject(prefix) { |pref_so_far, rel|
+          "#{pref_so_far}#{rel.to_s.pluralize}/#{attributes["#{rel}_id"]}/"
+        }
+      end
+
+      def self.path(params: {}, type: nil, prefix: nil, new_record: false)
+        params = params.with_indifferent_access
+
+        prefix = prefix || build_nested_prefix(params)
+        resource_name = self.name.demodulize.underscore.pluralize
+        endpoint = prefix + resource_name
+
+        if type == :singular
+          "#{endpoint}/#{params["id"]}"
+        elsif type == :persistence
+          if new_record
+            endpoint
+          else
+            "#{endpoint}/#{params["id"]}"
+          end
+        else
+          endpoint
+        end
+      end
+
+      def path(type:)
+        self.class.path(
+          type: type,
+          params: attributes,
+          prefix: self.class.build_nested_prefix(attributes),
+          new_record: new_record?
+        )
       end
 
       # Builds a new ruby object to encapsulate resource
@@ -77,8 +123,8 @@ module NameDrop
       #
       # @return [Boolean]
       def save
-        path = new_record? ? endpoint : "#{endpoint}/#{attributes[:id]}"
-        response = client.send(persistence_action, path, attributes)
+        response = client.send(persistence_action, path(type: :persistence), attributes)
+
         if response[response_key].present?
           self.attributes = response[response_key]
           true
@@ -92,7 +138,7 @@ module NameDrop
       #
       # @param [Hash] params
       def destroy(params = {})
-        client.delete("#{endpoint(params)}/#{attributes[:id]}")
+        client.delete(path(type: :singular))
       end
 
       # Returns name of Mention API object
@@ -103,10 +149,6 @@ module NameDrop
       end
 
       private
-
-      # @!attribute [r] client
-      #   @return [NameDrop::Client] object
-      attr_reader :client
 
       # Returns name of Mention API object
       #
