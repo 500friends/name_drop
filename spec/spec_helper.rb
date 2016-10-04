@@ -7,4 +7,5 @@ require 'pry'
 require 'name_drop'
 require 'webmock/rspec'
 
-WebMock.disable_net_connect!
+# Need to allow codeclimate so we can push our coverage info after a build on Travis
+WebMock.disable_net_connect!(allow: 'codeclimate.com')
