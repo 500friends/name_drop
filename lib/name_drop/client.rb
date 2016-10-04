@@ -1,5 +1,3 @@
-require 'rest-client'
-
 # Namespace for classes and modules that handle interaction with Mention API
 #
 # @since 0.1.0
@@ -48,7 +46,7 @@ module NameDrop
     # @param [String] endpoint
     # @return [Hash] encapsulates Mention API response of GET request
     def get(endpoint)
-      request(:get, endpoint)
+      execute_request Net::HTTP::Get.new(request_uri(endpoint))
     end
 
     # Makes POST Request through RestClient::Request.execute
@@ -57,7 +55,9 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of POST request
     def post(endpoint, attributes)
-      request(:post, endpoint, attributes)
+      request = Net::HTTP::Post.new request_uri(endpoint)
+      request.body = JSON.dump(attributes)
+      execute_request request
     end
 
     # Makes PUT Request through RestClient::Request.execute
@@ -66,7 +66,9 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of PUT request
     def put(endpoint, attributes)
-      request(:put, endpoint, attributes)
+      request = Net::HTTP::Put.new request_uri(endpoint)
+      request.body = JSON.dump(attributes)
+      execute_request request
     end
 
     # Makes DELETE Request through RestClient::Request.execute
@@ -74,42 +76,28 @@ module NameDrop
     # @param [String] endpoint
     # @return [Hash] encapsulates Mention API response of DELETE request
     def delete(endpoint)
-      request(:delete, endpoint)
+      execute_request Net::HTTP::Delete.new(request_uri(endpoint))
     end
 
     # @!endgroup
 
     private
 
-    # Calls RestClient::Request.execute with request hash, then parses response with JSON unless response is empty
-    #
-    # @param [Symbol] method
-    # @param [String] endpoint
-    # @param [Hash] attributes
-    # @return [Hash]
-    # @raise [NameDrop::Error] Rescuing RestClient::ExceptionWithResponse
-    def request(method, endpoint, attributes = {})
-      safe_json_parse(RestClient::Request.execute(create_request_hash(method, endpoint, attributes)))
-    rescue RestClient::ExceptionWithResponse => err
-      raise NameDrop::Error.new(error_message(method), safe_json_parse(err.response))
+    def execute_request(request)
+      response = Net::HTTP.start(request.uri.hostname, request.uri.port, use_ssl: true) { |http| http.request(add_headers(request)) }
+      json_response = safe_json_parse(response.body)
+      case response
+      when Net::HTTPSuccess
+        json_response
+      else
+        raise NameDrop::Error.new(error_message(request.method), json_response)
+      end
     end
 
     def safe_json_parse(json)
       JSON.parse(json).with_indifferent_access
     rescue
       json
-    end
-
-    # Sets request hash for API including attributes if present
-    #
-    # @param [Symbol] method
-    # @param [String] endpoint
-    # @param [Hash] attributes
-    # @return [Hash] API request Hash
-    def create_request_hash(method, endpoint, attributes)
-      request_hash = { method: method, url: request_url(endpoint), headers: headers }
-      request_hash[:payload] = attributes.to_json unless attributes.empty?
-      request_hash
     end
 
     # Sets error message
@@ -122,24 +110,30 @@ module NameDrop
 
     # @return [Hash] HTTP verbs and associated error verbs
     def error_verbs
-      { get: 'retrieving', post: 'creating', put: 'updating', delete: 'deleting' }
+      {
+        'GET' => 'retrieving',
+        'POST' => 'creating',
+        'PUT' => 'updating',
+        'DELETE' => 'deleting'
+      }
     end
 
-    # Sets headers for HTTP request including Mention access_token
+    # Add HTTP headers to the request including Mention access_token
     #
-    # @return [Hash] headers HTTP request
-    def headers
-      @headers ||= { 'Content-Type' => 'application/json',
-                     'Accept-Version' => '1.8',
-                     'Authorization' => "Bearer #{NameDrop.configuration.access_token}" }
+    # @return [Net::HTTP::Get, Net::HTTP::Put, Net::HTTP::Post, Net::HTTP::Delete] HTTP request object
+    def add_headers(request)
+      request.content_type = 'application/json'
+      request.add_field 'Accept-Version', '1.8'
+      request.add_field 'Authorization', "Bearer #{NameDrop.configuration.access_token}"
+      request
     end
 
     # Builds URL string for Mention API Request including Mention account_id
     #
     # @param [String] endpoint
-    # @return [String] URL
-    def request_url(endpoint)
-      "https://web.mention.net/api/accounts/#{NameDrop.configuration.account_id}/#{endpoint}"
+    # @return [URI] The URI for the Mention resource
+    def request_uri(endpoint)
+      URI("https://web.mention.net/api/accounts/#{NameDrop.configuration.account_id}/#{endpoint}")
     end
   end
 end
