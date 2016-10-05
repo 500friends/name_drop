@@ -3,17 +3,18 @@ require 'spec_helper'
 describe NameDrop::Client do
   describe '#initialize' do
     it 'allows a new client to be instantiated' do
-      expect{
+      expect {
         NameDrop::Client.new
       }.to_not raise_error
     end
   end
 
-  let(:client) { client = NameDrop::Client.new }
+  let(:client) { NameDrop::Client.new }
   let(:json) { { order: 'Royale with cheese' }.to_json }
   let(:headers) { { 'Content-Type' => 'application/json',
                     'Accept-Version' => '1.8',
                     'Authorization' => 'Bearer NotARealAccessToken' } }
+  let(:base_url) { Pathname.new('https://web.mention.net/api/accounts/NotARealAccountID/') }
 
   describe '#alerts' do
     it 'sends self and Alert to BaseFactory.new' do
@@ -37,45 +38,31 @@ describe NameDrop::Client do
   end
 
   shared_examples_for 'a request' do
-    it 'sends the method in a hash to RestClient' do
-      expect(RestClient::Request).to receive(:execute).with(hash_including(method: method)).and_return(json)
-      client.send(method, *arguments)
+    let(:url) { base_url.join(endpoint).to_s }
+
+    it 'sends the correct request to the configured endpoint' do
+      stub_request(method, url).with(headers: headers).to_return(status: 200, body: 'null', headers: {})
+      client.public_send(method, *arguments)
+      assert_requested(method, url, headers: headers)
     end
 
-    it 'sets the url based on endpoint and account_id' do
-      mention_url = "https://web.mention.net/api/accounts/NotARealAccountID/#{endpoint}"
-      expect(RestClient::Request).to receive(:execute).with(hash_including(url: mention_url)).and_return(json)
-      client.send(method, *arguments)
-    end
-
-    it 'sets the headers for the request' do
-      expect(RestClient::Request).to receive(:execute).with(hash_including(headers: headers)).and_return(json)
-      client.send(method, *arguments)
-    end
-
-    context 'request throws an error' do
-      it 'raises NameDrop::Error with correct message' do
-        error = RestClient::ExceptionWithResponse.new({code: 400}.to_json)
-        allow(RestClient::Request).to receive(:execute).and_raise(error)
-        error_message = "Error #{error_verb} Mention Resource"
+    context 'when an exception is returned' do
+      it 'raises a NameDrop::Error with a helpful message' do
+        stub_request(method, url).with(headers: headers).to_return(status: 404, body: { success: false, code: 404 }.to_json, headers: {})
         expect {
           client.send(method, *arguments)
-        }.to raise_error(NameDrop::Error, error_message)
+        }.to raise_error(NameDrop::Error, "Error #{error_verb} Mention Resource")
       end
     end
   end
 
-  shared_examples_for 'a request without attributes' do
-    it 'does not send a payload with the request' do
-      expect(RestClient::Request).to receive(:execute).with(hash_excluding(payload: anything)).and_return(json)
-      client.send(method, endpoint)
-    end
-  end
-
   shared_examples_for 'a request with attributes' do
+    let(:url) { base_url.join(endpoint).to_s }
+
     it 'sends a payload with the request' do
-      expect(RestClient::Request).to receive(:execute).with(hash_including(payload: attributes.to_json)).and_return(json)
+      stub_request(method, url).with(body: attributes.to_json, headers: headers).to_return(status: 200, body: 'null', headers: {})
       client.send(method, endpoint, attributes)
+      assert_requested(method, url, body: attributes.to_json, headers: headers)
     end
   end
 
@@ -85,7 +72,6 @@ describe NameDrop::Client do
     let(:endpoint) { 'alerts' }
     let(:arguments) { [endpoint] }
     it_should_behave_like 'a request'
-    it_should_behave_like 'a request without attributes'
   end
 
   describe '#post' do
@@ -115,6 +101,5 @@ describe NameDrop::Client do
     let(:endpoint) { 'alerts/1' }
     let(:arguments) { [endpoint] }
     it_should_behave_like 'a request'
-    it_should_behave_like 'a request without attributes'
   end
 end

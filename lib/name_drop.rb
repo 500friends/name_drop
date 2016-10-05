@@ -1,7 +1,11 @@
+require 'net/https'
+require 'uri'
 require 'active_support/dependencies/autoload'
 require 'active_support/inflector'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/hash/indifferent_access'
+
+require 'name_drop/version'
 
 module NameDrop
   extend ActiveSupport::Autoload
