@@ -39,7 +39,8 @@ module NameDrop
       # @param [Hash] params
       # @return [Array] resource objects
       def self.all(client, params = {})
-        response = client.get(endpoint(params))
+        alert_id = params.delete(:alert_id)
+        response = client.get(endpoint(alert_id: alert_id), params)
         response[response_key.pluralize].map do |attributes|
           new(client, attributes)
         end
