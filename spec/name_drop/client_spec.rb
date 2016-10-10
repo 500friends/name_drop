@@ -71,7 +71,9 @@ describe NameDrop::Client do
     let(:error_verb) { 'retrieving' }
     let(:endpoint) { 'alerts' }
     let(:arguments) { [endpoint] }
+    let(:attributes) { { your_mom: "can't miss" } }
     it_should_behave_like 'a request'
+    it_should_behave_like 'a request with attributes'
   end
 
   describe '#post' do

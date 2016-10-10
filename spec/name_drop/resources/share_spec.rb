@@ -6,7 +6,7 @@ describe NameDrop::Resources::Share do
 
   describe '#all' do
     it 'calls get on client' do
-      expect(client).to receive(:get).with('alerts/1/shares').and_return('shares' => [{ 'a' => 'b' }, { 'c' => 'd' }])
+      expect(client).to receive(:get).with('alerts/1/shares', {}).and_return('shares' => [{ 'a' => 'b' }, { 'c' => 'd' }])
       NameDrop::Resources::Share.all(client, alert_id: 1)
     end
   end

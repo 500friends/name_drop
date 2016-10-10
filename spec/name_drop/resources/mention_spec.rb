@@ -5,9 +5,18 @@ describe NameDrop::Resources::Mention do
   let(:mention) { NameDrop::Resources::Mention.new(client) }
 
   describe '#all' do
-    it 'calls get on client' do
-      expect(client).to receive(:get).with('alerts/1/mentions').and_return('mentions' => [{ 'a' => 'b' }, { 'c' => 'd' }])
-      NameDrop::Resources::Mention.all(client, alert_id: 1)
+    context 'when since_id is not passed' do
+      it 'calls get on client, with empty attributes' do
+        expect(client).to receive(:get).with('alerts/1/mentions', {}).and_return('mentions' => [{ 'a' => 'b' }, { 'c' => 'd' }])
+        NameDrop::Resources::Mention.all(client, alert_id: 1)
+      end
+    end
+
+    context 'when since_id is passed' do
+      it 'calls get on client, with since_id in attributes hash' do
+        expect(client).to receive(:get).with('alerts/1/mentions', { since_id: 12345 }).and_return('mentions' => [{ 'a' => 'b' }, { 'c' => 'd' }])
+        NameDrop::Resources::Mention.all(client, alert_id: 1, since_id: 12345)
+      end
     end
   end
 

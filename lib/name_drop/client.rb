@@ -44,9 +44,11 @@ module NameDrop
     # Makes GET Request through RestClient::Request.execute
     #
     # @param [String] endpoint
+    # @param [Hash] attributes
+    #
     # @return [Hash] encapsulates Mention API response of GET request
-    def get(endpoint)
-      execute_request Net::HTTP::Get.new(request_uri(endpoint))
+    def get(endpoint, attributes = {})
+      execute_request build_request(endpoint, 'Get', attributes)
     end
 
     # Makes POST Request through RestClient::Request.execute
@@ -55,9 +57,7 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of POST request
     def post(endpoint, attributes)
-      request = Net::HTTP::Post.new request_uri(endpoint)
-      request.body = JSON.dump(attributes)
-      execute_request request
+      execute_request build_request(endpoint, 'Post', attributes)
     end
 
     # Makes PUT Request through RestClient::Request.execute
@@ -66,9 +66,7 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of PUT request
     def put(endpoint, attributes)
-      request = Net::HTTP::Put.new request_uri(endpoint)
-      request.body = JSON.dump(attributes)
-      execute_request request
+      execute_request build_request(endpoint, 'Put', attributes)
     end
 
     # Makes DELETE Request through RestClient::Request.execute
@@ -76,12 +74,18 @@ module NameDrop
     # @param [String] endpoint
     # @return [Hash] encapsulates Mention API response of DELETE request
     def delete(endpoint)
-      execute_request Net::HTTP::Delete.new(request_uri(endpoint))
+      execute_request build_request(endpoint, 'Delete')
     end
 
     # @!endgroup
 
     private
+
+    def build_request(endpoint, method, attributes = {})
+      request = "Net::HTTP::#{method}".constantize.new request_uri(endpoint)
+      request.body = JSON.dump(attributes) if attributes.any?
+      request
+    end
 
     def execute_request(request)
       response = Net::HTTP.start(request.uri.hostname, request.uri.port, use_ssl: true) { |http| http.request(add_headers(request)) }
