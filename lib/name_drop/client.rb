@@ -82,8 +82,18 @@ module NameDrop
     private
 
     def build_request(endpoint, method, attributes = {})
-      request = "Net::HTTP::#{method}".constantize.new request_uri(endpoint)
-      request.body = JSON.dump(attributes) if attributes.any?
+      uri = request_uri(endpoint)
+
+      if method == 'Get'
+        uri.query = URI.encode_www_form(attributes)
+      end
+
+      request = "Net::HTTP::#{method}".constantize.new uri
+
+      unless method == 'Get'
+        request.body = JSON.dump(attributes) if attributes.any?
+      end
+
       request
     end
 

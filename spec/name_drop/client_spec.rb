@@ -72,8 +72,15 @@ describe NameDrop::Client do
     let(:endpoint) { 'alerts' }
     let(:arguments) { [endpoint] }
     let(:attributes) { { your_mom: "can't miss" } }
+    let(:url) { base_url.join("alerts?your_mom=can't%20miss").to_s }
+
+    it 'should serialize the params and append them to the URL' do
+      stub_request(method, url).with(headers: headers).to_return(status: 200, body: 'null', headers: {})
+      client.send(method, endpoint, attributes)
+      assert_requested(method, url, headers: headers)
+    end
+
     it_should_behave_like 'a request'
-    it_should_behave_like 'a request with attributes'
   end
 
   describe '#post' do
