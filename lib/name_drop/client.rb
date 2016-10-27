@@ -57,7 +57,7 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of POST request
     def post(endpoint, attributes)
-      execute_request build_request(endpoint, 'Post', attributes)
+      execute_request build_request_with_body(endpoint, 'Post', attributes)
     end
 
     # Makes PUT Request through RestClient::Request.execute
@@ -66,7 +66,7 @@ module NameDrop
     # @param [Hash] attributes
     # @return [Hash] encapsulates Mention API response of PUT request
     def put(endpoint, attributes)
-      execute_request build_request(endpoint, 'Put', attributes)
+      execute_request build_request_with_body(endpoint, 'Put', attributes)
     end
 
     # Makes DELETE Request through RestClient::Request.execute
@@ -83,17 +83,13 @@ module NameDrop
 
     def build_request(endpoint, method, attributes = {})
       uri = request_uri(endpoint)
+      uri.query = URI.encode_www_form(attributes) if attributes.present?
+      "Net::HTTP::#{method}".constantize.new uri
+    end
 
-      if method == 'Get'
-        uri.query = URI.encode_www_form(attributes)
-      end
-
-      request = "Net::HTTP::#{method}".constantize.new uri
-
-      unless method == 'Get'
-        request.body = JSON.dump(attributes) if attributes.any?
-      end
-
+    def build_request_with_body(endpoint, method, attributes = {})
+      request = "Net::HTTP::#{method}".constantize.new request_uri(endpoint)
+      request.body = JSON.dump(attributes) if attributes.any?
       request
     end
 
