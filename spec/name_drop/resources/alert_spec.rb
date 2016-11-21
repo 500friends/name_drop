@@ -2,34 +2,34 @@ require 'spec_helper'
 
 describe NameDrop::Resources::Alert do
   let(:client) { NameDrop::Client.new }
-  let(:alert) { NameDrop::Resources::Alert.new(client) }
+  
+  subject(:alert) { described_class.new(client) }
 
   describe '#all' do
     it 'calls get on client' do
       expect(client).to receive(:get).with('alerts', {}).and_return('alerts' => [{ 'a' => 'b' }, { 'c' => 'd' }])
-      NameDrop::Resources::Alert.all(client)
+      described_class.all(client)
     end
   end
-
 
   describe '#find' do
     it 'calls get on client' do
       expect(client).to receive(:get).with('alerts/8').and_return('alert' => { 'a' => 'b' })
-      NameDrop::Resources::Alert.find(client, 8)
+      described_class.find(client, 8)
     end
 
     context 'response_key found in reply' do
       it 'return an alert record' do
         allow(client).to receive(:get).with('alerts/8').and_return('alert' => { 'a' => 'b' })
-        result = NameDrop::Resources::Alert.find(client, 8)
-        expect(result.class).to eq(NameDrop::Resources::Alert)
+        result = described_class.find(client, 8)
+        expect(result.class).to eq(described_class)
       end
     end
 
     context 'response_key not found in reply' do
       it 'return response not an alert record' do
         allow(client).to receive(:get).with('alerts/8').and_return('siren' => { 'a' => 'b' })
-        result = NameDrop::Resources::Alert.find(client, 8)
+        result = described_class.find(client, 8)
         expect(result.class).to eq(Hash)
       end
     end
@@ -37,8 +37,8 @@ describe NameDrop::Resources::Alert do
 
   describe '#build' do
     it 'returns a new record' do
-      alert = NameDrop::Resources::Alert.build(client, { 'hmm' => 'there' })
-      expect(alert.class).to eq(NameDrop::Resources::Alert)
+      alert = described_class.build(client, { 'hmm' => 'there' })
+      expect(alert.class).to eq(described_class)
     end
   end
 
@@ -103,7 +103,7 @@ describe NameDrop::Resources::Alert do
       let(:action) { :post }
       let(:end_point) { 'alerts' }
       let(:attr) { { whoa: 'neo' } }
-      let(:alert) { NameDrop::Resources::Alert.build(client, attr) }
+      let(:alert) { described_class.build(client, attr) }
 
       it_should_behave_like '#save'
     end
@@ -112,7 +112,7 @@ describe NameDrop::Resources::Alert do
       let(:action) { :put }
       let(:end_point) { 'alerts/8' }
       let(:attr) { { 'id' => '8', 'hmm' => 'there' } }
-      let(:alert) { NameDrop::Resources::Alert.build(client, attr) }
+      let(:alert) { described_class.build(client, attr) }
 
       it_should_behave_like '#save'
     end
@@ -128,13 +128,49 @@ describe NameDrop::Resources::Alert do
 
   describe '.endpoint' do
     it 'returns alerts' do
-      expect(NameDrop::Resources::Alert.endpoint).to eq('alerts')
+      expect(described_class.endpoint).to eq('alerts')
     end
   end
 
   describe '#endpoint' do
     it 'returns alerts' do
       expect(alert.endpoint).to eq('alerts')
+    end
+  end
+  
+  describe '#new_record?' do
+    context 'when the record is a new record' do
+      before(:each) { subject.attributes[:id] = nil }
+      
+      it 'returns true' do
+        expect(subject.new_record?).to eq true
+      end
+    end
+    
+    context 'when the record is not a new record' do
+      before(:each) { subject.attributes[:id] = 101 }
+      
+      it 'returns false' do
+        expect(subject.new_record?).to eq false
+      end
+    end
+  end
+  
+  describe '#persisted?' do
+    context 'when the record is a new record' do
+      before(:each) { subject.attributes[:id] = nil }
+      
+      it 'returns false' do
+        expect(subject.persisted?).to eq false
+      end
+    end
+    
+    context 'when the record is not a new record' do
+      before(:each) { subject.attributes[:id] = 101 }
+      
+      it 'returns true' do
+        expect(subject.persisted?).to eq true
+      end
     end
   end
 end

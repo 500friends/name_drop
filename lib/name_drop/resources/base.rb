@@ -103,6 +103,20 @@ module NameDrop
         name.demodulize.downcase
       end
 
+      # Determines whether object is a new_record, which is true if :id key is missing
+      #
+      # @return [Boolean]
+      def new_record?
+        !attributes[:id]
+      end
+
+      # Determines whether object is persisted, which is true if :id key is present
+      #
+      # @return [Boolean]
+      def persisted?
+        !!attributes[:id]
+      end
+
       private
 
       # @!attribute [r] client
@@ -122,13 +136,6 @@ module NameDrop
       # @return [Symbol]
       def persistence_action
         new_record? ? :post : :put
-      end
-
-      # Determines whether object is a new_record, which is true if :id key is missing
-      #
-      # @return [Boolean]
-      def new_record?
-        !attributes[:id]
       end
     end
   end
