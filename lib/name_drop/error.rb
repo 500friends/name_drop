@@ -20,5 +20,11 @@ module NameDrop
       @detail = detail
       super msg
     end
+
+    def to_s
+      super.tap { |s| s << "\n#{detail}" if NameDrop.configuration.verbose }
+    end
+
+    alias inspect to_s
   end
 end

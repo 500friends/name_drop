@@ -10,7 +10,7 @@ module NameDrop
     #   @return [String] Mention Account ID
     # @!attribute access_token
     #   @return [String] Mention Application Access Token
-    attr_accessor :account_id, :access_token
+    attr_accessor :account_id, :access_token, :verbose
 
     # Initializes new NameDrop::Configuration object
     #
@@ -18,6 +18,7 @@ module NameDrop
     def initialize
       @account_id = 'NotARealAccountID'
       @access_token = 'NotARealAccessToken'
+      @verbose = false
     end
   end
 end
