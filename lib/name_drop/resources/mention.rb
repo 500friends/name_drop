@@ -26,6 +26,16 @@ module NameDrop
         raise NotImplementedError, 'You cannot alter a mention'
       end
 
+      # @return [Array] Collection of child mentions
+      def children(params = {})
+        endpoint = "#{self.class.endpoint(alert_id: attributes[:alert_id])}/#{attributes[:id]}/children"
+
+        response = client.get(endpoint, params)
+        response["children"].map do |attributes|
+          self.class.new(client, attributes)
+        end
+      end
+
       # Sets suffix of Mention API call
       #
       # @param [Hash] params the options to return an endpoint with

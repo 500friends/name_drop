@@ -44,6 +44,48 @@ describe NameDrop::Resources::Mention do
     end
   end
 
+  describe '#children' do
+    let(:children_attributes) {
+      {
+        'children' => [
+          {
+            'id' => '9',
+            'alert_id' => '1',
+            'title' => 'i am a child'
+
+          },
+          {
+            'id' => '10',
+            'alert_id' => '1',
+            'title' => 'another child'
+
+          },
+        ]
+      }
+    }
+
+    before do
+      mention.attributes[:id] = '2'
+      mention.attributes[:alert_id] = '1'
+    end
+
+    it 'calls get on client with the correct endpoint and params' do
+      expect(client).to receive(:get).with('alerts/1/mentions/2/children', { limit: 2 }).and_return(children_attributes)
+      mention.children(limit: 2)
+    end
+
+    context 'when there are children' do
+      before do
+        allow(client).to receive(:get).and_return(children_attributes)
+      end
+
+      it 'initializes Mention resource objects for each child' do
+        expect(mention.children.map(&:class).uniq).to eq [NameDrop::Resources::Mention]
+        expect(mention.children.map { |c| c.attributes['title'] }).to match_array ['i am a child', 'another child']
+      end
+    end
+  end
+
   describe '.endpoint' do
     it 'returns alerts/:alert_id/mentions' do
       expect(NameDrop::Resources::Mention.endpoint(alert_id: 1)).to eq('alerts/1/mentions')
