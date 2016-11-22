@@ -58,7 +58,6 @@ describe NameDrop::Resources::Mention do
             'id' => '10',
             'alert_id' => '1',
             'title' => 'another child'
-
           },
         ]
       }
