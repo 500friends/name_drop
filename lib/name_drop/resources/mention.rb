@@ -26,6 +26,19 @@ module NameDrop
         raise NotImplementedError, 'You cannot alter a mention'
       end
 
+      # @note The default page size for children is 20, although up to 100 can be returned
+      #   by specifying limit: 100. The Mention API also returns paging data so we can support
+      #   pagination in the future if the need arises.
+      # @return [Array] Collection of child mentions
+      def children(params = {})
+        endpoint = "#{self.class.endpoint(alert_id: attributes[:alert_id])}/#{attributes[:id]}/children"
+
+        response = client.get(endpoint, params)
+        response["children"].map do |attributes|
+          self.class.new(client, attributes)
+        end
+      end
+
       # Sets suffix of Mention API call
       #
       # @param [Hash] params the options to return an endpoint with
